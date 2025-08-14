@@ -2,7 +2,7 @@ stages:
   - e2e
 
 variables:
-   # 預設目標網址，可在 CI/CD Variables 覆蓋
+  CYPRESS_baseUrl: "https://example.cypress.io" # 預設目標網址，可在 CI/CD Variables 覆蓋
   CYPRESS_VIDEO: "true"
   CYPRESS_screenshotsFolder: "cypress/screenshots"
   CYPRESS_videosFolder: "cypress/videos"
@@ -13,7 +13,7 @@ e2e_test:
   script:
     - cypress run --browser chrome
   artifacts:
-    when: on_failure
+    when: always
     paths:
       - cypress/screenshots/**/*
       - cypress/videos/**/*
