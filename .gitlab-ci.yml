@@ -3,13 +3,6 @@ image: cypress/included:13.13.0
 stages:
   - test
 
-variables:
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
-
-cache:
-  paths:
-    - cache/Cypress
-
 before_script:
   - echo "Running before_script"
 
@@ -17,9 +10,10 @@ test:e2e:
   stage: test
   script:
     - npm ci
+    - npx cypress verify 
     - npx cypress run
   artifacts:
-    when: always
+    when: on_failure
     paths:
       - cypress/videos
       - cypress/screenshots
