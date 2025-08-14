@@ -11,7 +11,7 @@ e2e_test:
   stage: e2e
   image: cypress/included:13.13.0  # 內建 Cypress + Chrome/Firefox
   script:
-    - cypress run --browser chrome
+    - npx cypress run --browser chrome
   artifacts:
     when: always
     paths:
