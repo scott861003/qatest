@@ -3,17 +3,15 @@ image: cypress/included:13.13.0
 stages:
   - test
 
-before_script:
-  - echo "Running before_script"
-
 test:e2e:
   stage: test
   script:
-    - npm ci
-    - npx cypress verify 
+    # 安全驗證 Cypress binary
+    - npx cypress verify
+    # 執行測試
     - npx cypress run
   artifacts:
-    when: on_failure
+    when: always
     paths:
       - cypress/videos
       - cypress/screenshots
