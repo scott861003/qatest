@@ -13,7 +13,7 @@ e2e_test:
   script:
     - cypress run --browser chrome
   artifacts:
-    when: always
+    when: on_failure
     paths:
       - cypress/screenshots/**/*
       - cypress/videos/**/*
