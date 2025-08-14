@@ -1,31 +1,25 @@
+image: cypress/included:13.13.0
+
 stages:
-  - e2e
+  - test
 
 variables:
-  CYPRESS_baseUrl: "https://example.com"
-  CYPRESS_VIDEO: "true"
-  CYPRESS_screenshotsFolder: "cypress/screenshots"
-  CYPRESS_videosFolder: "cypress/videos"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
-e2e_test:
-  stage: e2e
-  image: cypress/included:13.13.0
-  before_script:
-    - mkdir -p cypress/results
-    - npm init -y
-    - npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
+cache:
+  paths:
+    - cache/Cypress
+
+before_script:
+  - echo "Running before_script"
+
+test:e2e:
+  stage: test
   script:
-    - npx cypress run --browser chrome
-    - npx mochawesome-merge cypress/results/*.json > mochawesome.json || true
-    - npx marge mochawesome.json --reportDir cypress/results --reportTitle "E2E Test Report" || true
+    - npm ci
+    - npx cypress run
   artifacts:
     when: always
     paths:
-      - cypress/screenshots/**/*
-      - cypress/videos/**/*
-      - cypress/results/*.html
-      - cypress/results/*.json
-    expire_in: 1 week
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      - cypress/videos
+      - cypress/screenshots
