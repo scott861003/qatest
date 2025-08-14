@@ -2,7 +2,7 @@ stages:
   - e2e
 
 variables:
-  CYPRESS_baseUrl: "https://example.cypress.io" # 預設目標網址，可在 CI/CD Variables 覆蓋
+   # 預設目標網址，可在 CI/CD Variables 覆蓋
   CYPRESS_VIDEO: "true"
   CYPRESS_screenshotsFolder: "cypress/screenshots"
   CYPRESS_videosFolder: "cypress/videos"
