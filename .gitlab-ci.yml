@@ -9,7 +9,7 @@ test:e2e:
     # 安全驗證 Cypress binary
     - npx cypress verify
     # 執行測試
-    - npx cypress run
+    - npx cypress run --browser chrome
   artifacts:
     when: always
     paths:
