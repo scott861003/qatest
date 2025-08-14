@@ -1,0 +1,23 @@
+stages:
+  - e2e
+
+variables:
+  CYPRESS_baseUrl: "https://example.cypress.io" # 預設目標網址，可在 CI/CD Variables 覆蓋
+  CYPRESS_VIDEO: "true"
+  CYPRESS_screenshotsFolder: "cypress/screenshots"
+  CYPRESS_videosFolder: "cypress/videos"
+
+e2e_test:
+  stage: e2e
+  image: cypress/included:13.13.0  # 內建 Cypress + Chrome/Firefox
+  script:
+    - cypress run --browser chrome
+  artifacts:
+    when: always
+    paths:
+      - cypress/screenshots/**/*
+      - cypress/videos/**/*
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
