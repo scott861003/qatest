@@ -5,5 +5,6 @@ describe('login test spec', () => {
     cy.get('input[name="password"]').type('123qwe')
     cy.get('button[class="el-button el-button--primary el-button--default login-btn"]').click()
     cy.wait(1000)
+    cy.log('webhooktest')
   })
 })
