@@ -20,9 +20,9 @@ jobs:
         with:
           node-version: 20
 
-      
-      
-
+      - name: install mochawesome  
+        run: npm install cypress-mochawesome-reporter --save-dev
+        
       - name: Run Cypress
         run: npx cypress run --browser chrome
         
