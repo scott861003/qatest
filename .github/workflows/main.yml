@@ -1,9 +1,8 @@
-name: CI + Cypress + Deploy Pages
+name: Windows CI + Cypress + Pages
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
 
 permissions:
   contents: read
@@ -12,26 +11,25 @@ permissions:
 
 jobs:
   test-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
 
-      - name: Build project
+      - name: Build
         run: npm run build
 
       - name: Start server
-        run: npx serve -s dist -l 3000 &
-        # 如果不是 dist，改成 build 或你實際資料夾
+        run: |
+          npx serve -s dist -l 3000
+        shell: pwsh
 
       - name: Wait for server
         run: npx wait-on http://localhost:3000
@@ -41,13 +39,10 @@ jobs:
         env:
           CYPRESS_baseUrl: http://localhost:3000
 
-      # 👇 只有 main 分支才部署
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+      - name: Deploy Pages
         uses: actions/deploy-pages@v4
