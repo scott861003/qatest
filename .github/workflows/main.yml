@@ -23,9 +23,6 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build
-        run: npm run build
-
       - name: Start server
         run: |
           npx serve -s dist -l 3000
