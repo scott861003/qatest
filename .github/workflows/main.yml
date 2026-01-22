@@ -11,9 +11,7 @@ permissions:
 
 jobs:
   test-and-deploy:
-    runs-on: windows-latest
-    env: 
-      CYPRESS_baseUrl: https://pre-booking-test.lentongrp.com/
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
