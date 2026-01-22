@@ -27,7 +27,6 @@ jobs:
 
       - name: Start server
         run: npx serve -s dist -l 3000
-        shell: pwsh
 
       - name: Wait for server
         run: npx wait-on http://localhost:3000
