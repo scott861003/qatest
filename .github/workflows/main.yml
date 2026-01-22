@@ -25,11 +25,16 @@ jobs:
       - name: Install mochawesome
         run: npm install cypress-mochawesome-reporter --save-dev
 
+      - name: Start server
+        run: |
+          npx serve -s dist -l 3000
+        shell: pwsh
 
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
+        
       - name: Run Cypress
         run: npx cypress run
-        env:
-          CYPRESS_baseUrl: http://localhost:3000
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
