@@ -26,8 +26,7 @@ jobs:
         run: npm install cypress-mochawesome-reporter --save-dev
 
       - name: Start server
-        run: |
-          npx serve -s dist -l 3000
+        run: npx serve -s dist -l 3000
         shell: pwsh
 
       - name: Wait for server
