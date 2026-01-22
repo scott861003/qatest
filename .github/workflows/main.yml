@@ -32,5 +32,12 @@ jobs:
 
       - name: Run Cypress
         run: npx cypress run --browser chrome
+        
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+         name: cypress-report
+         path: cypress/reports
 
 
