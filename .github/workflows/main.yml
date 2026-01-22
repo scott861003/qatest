@@ -1,30 +1,53 @@
-name: example-basic
-# This workflow represents a set of basic End-to-End tests
+name: CI + Cypress + Deploy Pages
+
 on:
   push:
-    branches:
-      - 'master'
+    branches: [ "main" ]
   pull_request:
-  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  basic:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04, windows-2025, macos-15]
-    runs-on: ${{ matrix.os }}
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: Cypress tests
-        uses: ./ # if copying, replace with cypress-io/github-action@v7
-        # the parameters below are only necessary
-        # because we are running these examples in a monorepo
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          working-directory: examples/basic
-          # just for full picture after installing Cypress
-          # print information about detected browsers, etc
-          # see https://on.cypress.io/command-line#cypress-info
-          build: npx cypress info
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Start server
+        run: npx serve -s dist -l 3000 &
+        # 如果不是 dist，改成 build 或你實際資料夾
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
+
+      - name: Run Cypress
+        run: npx cypress run
+        env:
+          CYPRESS_baseUrl: http://localhost:3000
+
+      # 👇 只有 main 分支才部署
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/deploy-pages@v4
